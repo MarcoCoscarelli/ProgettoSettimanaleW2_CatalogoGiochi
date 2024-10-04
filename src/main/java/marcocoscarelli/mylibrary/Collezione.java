@@ -9,7 +9,7 @@ public class Collezione {
     private Map<Integer, Gioco> giochi = new HashMap<>();
     private Faker faker = new Faker();
 
-    // Aggiungi un gioco alla collezione
+
     public void aggiungiGioco(Gioco gioco) {
         if (giochi.containsKey(gioco.getId())) {
             throw new IllegalArgumentException("Il gioco con ID " + gioco.getId() + " esiste già.");
@@ -17,13 +17,17 @@ public class Collezione {
         giochi.put(gioco.getId(), gioco);
     }
 
-    // Cerca un gioco per ID
+    public boolean esisteId(int id) {
+        return giochi.containsKey(id);
+    }
+
+
     public Gioco cercaPerId(int id) {
         return Optional.ofNullable(giochi.get(id))
                 .orElseThrow(() -> new NoSuchElementException("Nessun gioco trovato con ID: " + id));
     }
 
-    // Cerca giochi per prezzo massimo
+
     public List<Gioco> cercaPerPrezzo(double prezzo) {
         return giochi.values().stream()
                 .filter(gioco -> gioco.getPrezzo() < prezzo)
@@ -40,11 +44,12 @@ public class Collezione {
     }
 
 
-    public void rimuoviGioco(int id) {
+    public boolean rimuoviGioco(int id) {
         if (!giochi.containsKey(id)) {
-            throw new NoSuchElementException("Nessun gioco trovato con ID: " + id);
+            return false; // Gioco non trovato
         }
         giochi.remove(id);
+        return true; // Gioco rimosso con successo
     }
 
 
@@ -98,4 +103,6 @@ public class Collezione {
             aggiungiGioco(giocoDaTavolo);
         }
     }
+
+
 }
